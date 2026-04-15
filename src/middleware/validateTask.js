@@ -1,4 +1,4 @@
-import { body } from 'express-validator';
+import { body, query } from 'express-validator';
 import { checkValidationResults } from './handleValidationErrors.js';
 
 export const validateTask = [
@@ -15,6 +15,19 @@ export const validateTask = [
     .optional()
     .isBoolean()
     .withMessage('completed must be true or false'),
+
+  checkValidationResults,
+];
+
+export const validateTaskQuery = [
+  query('completed')
+    .optional()
+    .custom((value) => value === 'true' || value === 'false')
+    .withMessage('completed query parameter must be true or false')
+    .customSanitizer((value) => {
+      if (value === undefined) return value;
+      return value === 'true';
+    }),
 
   checkValidationResults,
 ];
